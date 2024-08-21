@@ -1,0 +1,73 @@
+<div class="container mx-auto px-[10%] roboto-regular">
+  <div class="mt-16">
+    <h1 class="text-3xl">Undo/Redo Form</h1>
+    <form class="mt-6" [formGroup]="userForm">
+      <!-- username part -->
+      <div class="mt-5">
+        <p class="mb-2">Username<span class=""> *</span></p>
+        <input
+          pInputText
+          class="w-[30rem]"
+          id="Username"
+          formControlName="username"
+          type="text"
+        />
+      </div>
+
+      <!-- email part -->
+      <div class="mt-5 w-[30%]">
+        <p class="mb-2">Email<span class="text-red-400"> *</span></p>
+        <input
+          pInputText
+          class="w-[30rem]"
+          id="email"
+          formControlName="email"
+          type="email"
+        />
+      </div>
+
+      <!-- city Dropdown -->
+
+      <div class="mt-5 w-[30%]">
+        <p class="mb-2">City<span class="text-red-400"> *</span></p>
+        <p-dropdown
+          formControlName="city"
+          [options]="cities"
+          optionLabel="name"
+          placeholder="Select a City"
+        />
+      </div>
+
+      <!-- textaria start -->
+      <div class="mt-5 w-[30%] flex items-center gap-x-2">
+        <div>
+          <p class="mb-2">Feedback</p>
+          <textarea
+            rows="5"
+            cols="30"
+            pInputTextarea
+            formControlName="feedback"
+          >
+          </textarea>
+        </div>
+      </div>
+
+      <div class="mt-5 w-[30%] flex items-center gap-x-2">
+        <p-checkbox formControlName="tech" value="angular" inputId="tech" />
+        <p class="">Angular Developer</p>
+      </div>
+
+      <!-- button start -->
+      <div class="grid grid-cols-2 gap-x-6 mt-5 w-[30%]">
+        <p-button
+          styleClass="w-full bg-violet-400 border-violet-400 mt-6 merriweather-regular"
+          label="Undo"
+        ></p-button>
+        <p-button
+          styleClass="w-full bg-blue-400 border-blue-400 mt-6 merriweather-regular"
+          label="Redo"
+        ></p-button>
+      </div>
+    </form>
+  </div>
+</div>
