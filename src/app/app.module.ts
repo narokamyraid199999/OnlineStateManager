@@ -15,6 +15,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { DropdownModule } from 'primeng/dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [AppComponent, ActionFormComponent, PageNotFoundComponent],
@@ -33,7 +34,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     InputTextareaModule,
     BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [MessageService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

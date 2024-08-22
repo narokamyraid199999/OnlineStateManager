@@ -1,5 +1,13 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import {
+  Form,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { StateManagerService } from 'src/app/core/services/stateManager.service';
 
 interface City {
   name: string;
@@ -11,8 +19,37 @@ interface City {
   templateUrl: './action-form.component.html',
   styleUrls: ['./action-form.component.css'],
 })
-export class ActionFormComponent {
-  constructor() {}
+export class ActionFormComponent implements OnInit {
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _stateManager: StateManagerService,
+    private _messageService: MessageService
+  ) {}
+
+  ngOnInit(): void {
+    this.formInit();
+    this.formChecker();
+  }
+
+  userForm: FormGroup = {} as FormGroup;
+
+  formInit(): void {
+    this.userForm = this._formBuilder.group({
+      username: [''],
+      email: [''],
+      city: [''],
+      tech: [''],
+      feedback: [''],
+    });
+  }
+
+  formChecker(): void {
+    this.userForm.valueChanges.subscribe(() => {
+      this._stateManager.saveFormState(this.userForm);
+      // console.log('canUndo', this._stateManager.undoStack);
+      // console.log('canRedo', this._stateManager.redoStack);
+    });
+  }
 
   cities: City[] = [
     { name: 'New York', code: 'NY' },
@@ -24,23 +61,30 @@ export class ActionFormComponent {
 
   selectedCity: City | undefined;
 
-  markAllAsTouched(form: any) {
-    Object.values(form).forEach((control: any) => {
-      control?.markAsTouched();
+  undo(): void {
+    this._stateManager.undo(this.userForm);
+    // console.log('redo stack', this._stateManager.redoStack);
+    this._messageService.add({
+      severity: 'info',
+      summary: 'Info',
+      detail: 'Undo changes',
     });
   }
 
-  userForm: FormGroup = new FormGroup({
-    username: new FormControl<string>('', [
-      Validators.required,
-      Validators.minLength(5),
-      Validators.maxLength(16),
-    ]),
-    email: new FormControl<string>('', [Validators.required, Validators.email]),
-    city: new FormControl<City | null>(null, [Validators.required]),
-    tech: new FormControl<string | null>(null),
-    feedback: new FormControl<string | null>(null),
-  });
+  redo(): void {
+    this._stateManager.redo(this.userForm);
+    this._messageService.add({
+      severity: 'success',
+      summary: 'success',
+      detail: 'Redo changes',
+    });
+  }
 
-  loading: boolean = false;
+  canUndo(): boolean {
+    return this._stateManager.canUndo();
+  }
+
+  canRedo(): boolean {
+    return this._stateManager.canRedo();
+  }
 }
